@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <a href="index.html">Home</a> |
+<a href="add.html">Add</a> |
+<a href="manage.html">Manage</a> |
+<a href="dashboard.html">Dashboard</a>
+<hr>
+<head>
+    <title>Search Asset</title>
+</head>
+<body>
+
+<h2>Search Asset</h2>
+
+<input type="text" id="searchId" placeholder="Enter Asset ID">
+<button onclick="searchAsset()">Search</button>
+
+<h3>Result:</h3>
+<div id="result"></div>
+
+<script>
+function searchAsset() {
+    const id = document.getElementById("searchId").value;
+
+    fetch("/asset/" + id)
+    .then(res => res.json())
+    .then(data => {
+        if (data.length === 0) {
+            document.getElementById("result").innerHTML = "No asset found";
+        } else {
+            const asset = data[0];
+            document.getElementById("result").innerHTML = `
+                Asset ID: ${asset.asset_id} <br>
+                Name: ${asset.name} <br>
+                Lab: ${asset.lab} <br>
+                Status: ${asset.status} <br>
+                RFID: ${asset.rfid_uid}
+            `;
+        }
+    });
+}
+</script>
+
+</body>
+</html>

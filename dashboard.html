@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <a href="index.html">Home</a> |
+<a href="add.html">Add</a> |
+<a href="manage.html">Manage</a> |
+<a href="search.html">Search</a>
+<hr>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<h2>Dashboard</h2>
+
+<h3>Total Assets: <span id="total"></span></h3>
+<h3>Working Assets: <span id="working"></span></h3>
+<h3>Faulty Assets: <span id="faulty"></span></h3>
+
+<script>
+fetch("/dashboard")
+.then(res => res.json())
+.then(data => {
+    document.getElementById("total").innerText = data.total;
+    document.getElementById("working").innerText = data.working;
+    document.getElementById("faulty").innerText = data.faulty;
+});
+</script>
+
+</body>
+</html>

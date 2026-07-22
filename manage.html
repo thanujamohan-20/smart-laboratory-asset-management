@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <a href="index.html">Home</a> |
+<a href="add.html">Add</a> |
+<a href="search.html">Search</a> |
+<a href="dashboard.html">Dashboard</a>
+<hr>
+<head>
+    <title>Manage Assets</title>
+</head>
+<body>
+
+<h2>All Assets</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Asset ID</th>
+            <th>Name</th>
+            <th>Lab</th>
+            <th>Status</th>
+            <th>RFID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="tableData"></tbody>
+</table>
+
+<script>
+
+function loadData() {
+    fetch("/assets")
+    .then(res => res.json())
+    .then(data => {
+        let rows = "";
+
+        data.forEach(asset => {
+            rows += `
+            <tr>
+                <td>${asset.id}</td>
+                <td>${asset.asset_id}</td>
+                <td>${asset.name}</td>
+                <td>${asset.lab}</td>
+                <td>${asset.status}</td>
+                <td>${asset.rfid_uid}</td>
+                <td>
+                    <button onclick="deleteAsset(${asset.id})">Delete</button>
+                    <button onclick="editAsset(${asset.id}, '${asset.name}', '${asset.lab}', '${asset.status}')">Edit</button>
+                </td>
+            </tr>
+            `;
+        });
+
+        document.getElementById("tableData").innerHTML = rows;
+    });
+}
+
+function deleteAsset(id) {
+    fetch("/delete/" + id, {
+        method: "DELETE"
+    })
+    .then(res => res.text())
+    .then(() => loadData());
+}
+
+function editAsset(id, name, lab, status) {
+    const newName = prompt("Enter new name:", name);
+    const newLab = prompt("Enter new lab:", lab);
+    const newStatus = prompt("Enter new status:", status);
+
+    fetch("/update/" + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: newName,
+            lab: newLab,
+            status: newStatus
+        })
+    })
+    .then(res => res.text())
+    .then(() => loadData());
+}
+
+// Load data on page load
+loadData();
+
+</script>
+
+</body>
+</html>

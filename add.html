@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <a href="index.html">Home</a> |
+<a href="manage.html">Manage</a> |
+<a href="search.html">Search</a> |
+<a href="dashboard.html">Dashboard</a>
+<hr>
+<head>
+    <title>Add Asset</title>
+</head>
+<body>
+
+<h2>Add Asset</h2>
+
+<input type="text" id="asset_id" placeholder="Asset ID"><br><br>
+<input type="text" id="name" placeholder="Name"><br><br>
+<input type="text" id="lab" placeholder="Lab"><br><br>
+<input type="text" id="status" placeholder="Status"><br><br>
+<input type="text" id="rfid_uid" placeholder="RFID UID"><br><br>
+
+<button onclick="addAsset()">Add</button>
+
+<script>
+function addAsset() {
+    fetch("/add-asset", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            asset_id: document.getElementById("asset_id").value,
+            name: document.getElementById("name").value,
+            lab: document.getElementById("lab").value,
+            status: document.getElementById("status").value,
+            rfid_uid: document.getElementById("rfid_uid").value
+        })
+    })
+    .then(res => res.text())
+    .then(data => alert(data));
+}
+</script>
+
+</body>
+</html>
